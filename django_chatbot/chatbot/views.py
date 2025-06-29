@@ -1,3 +1,5 @@
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import openai
@@ -25,6 +27,7 @@ def ask_openai(message):
     return answer
 
 # Create your views here.
+@login_required(login_url='login')
 def chatbot(request):
     chats = Chat.objects.filter(user=request.user)
 
@@ -76,3 +79,6 @@ def register(request):
 def logout(request):
     auth.logout(request)
     return redirect('login')
+
+def health_check(request):
+    return HttpResponse("OK", status=200)
