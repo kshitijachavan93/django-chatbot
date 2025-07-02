@@ -1,9 +1,9 @@
 {
   "family": "django-chatbot-task",
   "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
   "cpu": "256",
   "memory": "512",
-  "requiresCompatibilities": ["FARGATE"],
   "executionRoleArn": "arn:aws:iam::486991249421:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
@@ -15,15 +15,8 @@
           "protocol": "tcp"
         }
       ],
-      "essential": true,
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "/ecs/django-chatbot",
-          "awslogs-region": "eu-north-1",
-          "awslogs-stream-prefix": "ecs"
-        }
-      }
+      "essential": true
     }
   ]
 }
+
