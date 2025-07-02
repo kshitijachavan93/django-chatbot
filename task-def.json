@@ -1,7 +1,4 @@
-stage('Register ECS Task') {
-  steps {
-    script {
-      def taskDef = """
+
       {
         "family": "django-chatbot-task",
         "networkMode": "awsvpc",
@@ -31,9 +28,4 @@ stage('Register ECS Task') {
           }
         ]
       }
-      """
-      writeFile file: 'new-task-def.json', text: taskDef
-    }
-    sh 'aws ecs register-task-definition --cli-input-json file://new-task-def.json'
-  }
-}
+     
