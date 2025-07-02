@@ -1,29 +1,39 @@
-{
-  "family": "django-chatbot-task",
-  "networkMode": "awsvpc",
-  "requiresCompatibilities": ["FARGATE"],
-  "cpu": "256",
-  "memory": "512",
-  "executionRoleArn": "arn:aws:iam::486991249421:role/ecsTaskExecutionRole",
-  "containerDefinitions": [
-    {
-      "name": "django-chatbot",
-      "image": "486991249421.dkr.ecr.eu-north-1.amazonaws.com/django-chatbot:<IMAGE_TAG>",
-      "portMappings": [
-        {
-          "containerPort": 8000,
-          "protocol": "tcp"
-        }
-      ],
-      "essential": true,
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "/ecs/django-chatbot",
-          "awslogs-region": "eu-north-1",
-          "awslogs-stream-prefix": "ecs"
-        }
+stage('Register ECS Task') {
+  steps {
+    script {
+      def taskDef = """
+      {
+        "family": "django-chatbot-task",
+        "networkMode": "awsvpc",
+        "requiresCompatibilities": ["FARGATE"],
+        "cpu": "256",
+        "memory": "512",
+        "executionRoleArn": "arn:aws:iam::486991249421:role/ecsTaskExecutionRole",
+        "containerDefinitions": [
+          {
+            "name": "django-chatbot",
+            "image": "${ECR_REPO}:${IMAGE_TAG}",
+            "portMappings": [
+              {
+                "containerPort": 8000,
+                "protocol": "tcp"
+              }
+            ],
+            "essential": true,
+            "logConfiguration": {
+              "logDriver": "awslogs",
+              "options": {
+                "awslogs-group": "/ecs/django-chatbot",
+                "awslogs-region": "${AWS_REGION}",
+                "awslogs-stream-prefix": "ecs"
+              }
+            }
+          }
+        ]
       }
+      """
+      writeFile file: 'new-task-def.json', text: taskDef
     }
-  ]
+    sh 'aws ecs register-task-definition --cli-input-json file://new-task-def.json'
+  }
 }
