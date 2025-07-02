@@ -1,9 +1,15 @@
 {
   "family": "django-chatbot-task",
   "networkMode": "awsvpc",
+<<<<<<< HEAD
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "256",
   "memory": "512",
+=======
+  "cpu": "256",
+  "memory": "512",
+  "requiresCompatibilities": ["FARGATE"],
+>>>>>>> 56ecb36 (Added Jenkins pipeline and ECS task definition)
   "executionRoleArn": "arn:aws:iam::486991249421:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
@@ -15,8 +21,23 @@
           "protocol": "tcp"
         }
       ],
+<<<<<<< HEAD
       "essential": true
     }
   ]
 }
 
+=======
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/django-chatbot",
+          "awslogs-region": "eu-north-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
+>>>>>>> 56ecb36 (Added Jenkins pipeline and ECS task definition)
